@@ -89,8 +89,6 @@ document.addEventListener('click', function (e) {
         }
     }
 });
-
-
 // Service Workers
 
 //This is the "Offline page" service worker
@@ -104,7 +102,7 @@ if (navigator.serviceWorker.controller) {
         navigator.serviceWorker
             .register('./service-worker.js')
             .then(function(reg){
-                console.log('Service Worker Register');
+                console.log('Service worker has been registered for scope:'+ reg.scope);
             }).catch(function(err) {
             console.log(err);
         });
