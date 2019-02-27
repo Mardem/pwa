@@ -1,0 +1,9 @@
+#notes {
+    list-style: none;
+    padding: 0;
+}
+#notes:hover{
+    background: #0076df;
+    color: #fff;
+    padding: 5px;
+}
