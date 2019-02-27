@@ -110,7 +110,6 @@ if (navigator.serviceWorker.controller) {
 }
 window.addEventListener('load', function() {
 
-
     let btnAdd = document.getElementById('baixarApp');
     let deferredPrompt;
 

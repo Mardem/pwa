@@ -6,7 +6,6 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "index.html",
-  "related_applications": false,
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
