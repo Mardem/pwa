@@ -42,3 +42,11 @@ self.addEventListener('fetch', function (e) {
         })
     );
 });
+
+//This is a event that can be fired from your page to tell the SW to update the offline page
+self.addEventListener('refreshOffline', function(response) {
+    return caches.open(cacheName).then(function(cache) {
+        console.log('[PWA Builder] Offline page updated from refreshOffline event: '+ response.url);
+        return cache.put(fileToCache, response);
+    });
+});
