@@ -2,7 +2,7 @@ let notes = window.localStorage.getItem('notes') || '{"data": []}';
 
 notes = JSON.parse(notes);
 
-let updateList = function() {
+let updateList = function () {
     console.log('[Application] start watch');
 
     Array.observe(notes.data, function (changes) {
@@ -10,34 +10,34 @@ let updateList = function() {
         let value = '';
         let status = null;
 
-        if(changes[0].type === 'splice') {
+        if (changes[0].type === 'splice') {
             index = changes[0].index;
             value = changes[0].object[index];
             status = (changes[0].addedCount > 0) ? 'created' : 'removed';
         }
 
-        if(changes[0].type === 'update') {
+        if (changes[0].type === 'update') {
             index = changes[0].name;
             value = changes[0].object[index];
             status = 'updated';
         }
 
-        if(!value && status === 'created' && status === 'updated') {
+        if (!value && status === 'created' && status === 'updated') {
             return;
         }
 
         let notesTag = document.getElementById('notes');
 
-        if(status === 'updated') {
+        if (status === 'updated') {
             console.log('Implementar');
         }
 
-        if(status === 'removed') {
+        if (status === 'removed') {
             let listOfNotes = document.querySelectorAll('#notes li');
             notesTag.removeChild(listOfNotes[index]);
         }
 
-        if(status === 'created') {
+        if (status === 'created') {
             let newLine = document.createElement('li');
             newLine.innerHTML = value;
             notesTag.appendChild(newLine);
@@ -46,30 +46,30 @@ let updateList = function() {
     });
 };
 
-let createNote = function() {
-  let input = document.querySelector('#form-add-note input[type="text"]');
-  let value = input.value;
+let createNote = function () {
+    let input = document.querySelector('#form-add-note input[type="text"]');
+    let value = input.value;
 
-  notes.data.push(value);
+    notes.data.push(value);
 
-  input.value = "";
+    input.value = "";
 };
 
 updateList();
 
-document.addEventListener('DOMContentLoaded', function(e) {
+document.addEventListener('DOMContentLoaded', function (e) {
 
     let listOfNotes = document.getElementById('notes');
     let listHtml = '';
-    
-    for (i=0; i < notes.data.length; i++){
-        listHtml += '<li>'+ notes.data[i] +'</li>'
+
+    for (i = 0; i < notes.data.length; i++) {
+        listHtml += '<li>' + notes.data[i] + '</li>'
     }
 
     listOfNotes.innerHTML = listHtml;
 
     let formAddNotes = document.getElementById('form-add-note');
-    formAddNotes.addEventListener('submit', function(e) {
+    formAddNotes.addEventListener('submit', function (e) {
         e.preventDefault();
         createNote();
     });
@@ -98,41 +98,43 @@ if (navigator.serviceWorker.controller) {
     console.log('[PWA Builder] active service worker found, no need to register')
 } else {
     //Register the ServiceWorker
-    if('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')
-            .then(function(reg){
-                console.log('Service worker has been registered for scope:'+ reg.scope);
-            }).catch(function(err) {
+            .then(function (reg) {
+                console.log('Service worker has been registered for scope:' + reg.scope);
+            }).catch(function (err) {
             console.log(err);
         });
     }
 }
+window.addEventListener('load', function() {
 
-let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-});
+    let btnAdd = document.getElementById('baixarApp');
+    let deferredPrompt;
 
-let btnAdd = document.querySelector('#baixarApp');
+    window.addEventListener('beforeinstallprompt', function (e) {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+    });
 
-btnAdd.addEventListener('click', (e) => {
-    // hide our user interface that shows our A2HS button
-    btnAdd.style.display = 'none';
-    // Show the prompt
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice
-        .then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-            } else {
-                console.log('User dismissed the A2HS prompt');
-            }
-            deferredPrompt = null;
-        });
+    btnAdd.addEventListener('click', function (e) {
+        // hide our user interface that shows our A2HS button
+        btnAdd.style.display = 'none';
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice
+            .then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+                deferredPrompt = null;
+            });
+    });
 });
